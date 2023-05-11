@@ -1,7 +1,7 @@
 import useAsync from '../useAsync';
 import useToken from '../useToken';
 
-import * as enrollmentApi from '../../services/hotelApi';
+import * as hotelApi from '../../services/hotelApi';
 
 export default function useHotel() {
   const token = useToken();
@@ -11,7 +11,7 @@ export default function useHotel() {
     loading: hotelsLoading,
     error: hotelsError,
     act: getHotels,
-  } = useAsync(() => enrollmentApi.getPersonalInformations(token));
+  } = useAsync(() => hotelApi.getHotelsInfo(token));
 
   return {
     hotels,

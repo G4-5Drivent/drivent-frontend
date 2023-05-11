@@ -21,6 +21,7 @@ const StyledHotel = styled.div`
 
   box-sizing: border-box;
   padding: 16px 14px;
+  margin: 0 20px 20px 0;
 `;
 
 const HotelName = styled.h3`
