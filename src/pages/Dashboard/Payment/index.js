@@ -4,50 +4,66 @@ import { useState } from 'react';
 import Title from '../../../components/Dashboard/Payment/Title';
 import Instruction from '../../../components/Dashboard/Payment/Instruction';
 import TicketBox from '../../../components/Dashboard/Payment/TicketBox';
+import ConfirmButton from '../../../components/Dashboard/Payment/ConfirmButton';
+import ConfirmPayment from '../../../components/Dashboard/Payment/ConfirmPayment';
 
 export default function Payment() {
   const [selectedTickets, setSelectedTickets] = useState({
     ingresso: '',
-    hospedagem: ''
+    hospedagem: '',
   });
 
   const handleTicketSelection = (category, ticket) => {
     setSelectedTickets((prevSelectedTickets) => ({
       ...prevSelectedTickets,
-      [category]: ticket
+      [category]: ticket,
     }));
   };
 
   const ticketPrice = {
-    presencial: 250,
-    online: 100
+    Presencial: 250,
+    Online: 100,
   };
 
   const hotelPrice = {
-    'sem-hotel': 0,
-    'com-hotel': 350
+    'Sem Hotel': 0,
+    'Com Hotel': 350,
   };
 
   const selectedTicketPrice = selectedTickets.ingresso ? ticketPrice[selectedTickets.ingresso] : 0;
   const selectedHotelPrice = selectedTickets.hospedagem ? hotelPrice[selectedTickets.hospedagem] : 0;
   const totalAmount = selectedTicketPrice + selectedHotelPrice;
 
+  const [isPaymentConfirmed, setIsPaymentConfirmed] = useState(false);
+
+  const handleConfirmPayment = () => {
+    setIsPaymentConfirmed(true);
+  };
+
+  if (isPaymentConfirmed) {
+    return (
+      <Container>
+        <Title>Ingresso e pagamento</Title>
+        <ConfirmPayment ticket={selectedTickets.ingresso} hotel={selectedTickets.hospedagem} totalAmount={totalAmount} />
+      </Container>
+    );
+  }
   return (
     <Container>
       <Title>Ingresso e pagamento</Title>
       <Instruction>Primeiro, escolha sua modalidade de ingresso</Instruction>
       <TicketBoxContainer>
         <TicketBox
-          selected={selectedTickets.ingresso === 'presencial'}
-          onClick={() => handleTicketSelection('ingresso', 'presencial')}
+          selected={selectedTickets.ingresso === 'Presencial'}
+          onClick={() => handleTicketSelection('ingresso', 'Presencial')}
         >
           <h1>Presencial</h1>
           <h2>R$ 250</h2>
         </TicketBox>
 
         <TicketBox
-          selected={selectedTickets.ingresso === 'online'}
-          onClick={() => handleTicketSelection('ingresso', 'online')}
+          selected={selectedTickets.ingresso === 'Online'}
+          onClick={() => handleTicketSelection('ingresso', 'Online')}
         >
           <h1>Online</h1>
           <h2>R$ 100</h2>
@@ -59,16 +75,16 @@ export default function Payment() {
           <Instruction>Ótimo! Agora escolha sua modalidade de hospedagem</Instruction>
           <TicketBoxContainer>
             <TicketBox
-              selected={selectedTickets.hospedagem === 'sem-hotel'}
-              onClick={() => handleTicketSelection('hospedagem', 'sem-hotel')}
+              selected={selectedTickets.hospedagem === 'Sem Hotel'}
+              onClick={() => handleTicketSelection('hospedagem', 'Sem Hotel')}
             >
               <h1>Sem Hotel</h1>
               <h2>+ R$ 0</h2>
             </TicketBox>
 
             <TicketBox
-              selected={selectedTickets.hospedagem === 'com-hotel'}
-              onClick={() => handleTicketSelection('hospedagem', 'com-hotel')}
+              selected={selectedTickets.hospedagem === 'Com Hotel'}
+              onClick={() => handleTicketSelection('hospedagem', 'Com Hotel')}
             >
               <h1>Com Hotel</h1>
               <h2>+ R$ 350</h2>
@@ -78,9 +94,12 @@ export default function Payment() {
       )}
 
       {selectedTickets.hospedagem && (
-        <Instruction>
-          Fechado! O total ficou em <TotalAmount>{`R$ ${totalAmount}`}</TotalAmount>. Agora é só confirmar:
-        </Instruction>
+        <>
+          <Instruction>
+            Fechado! O total ficou em <TotalAmount>{`R$ ${totalAmount}`}</TotalAmount>. Agora é só confirmar:
+          </Instruction>
+          <ConfirmButton onClick={handleConfirmPayment}/>
+        </>
       )}
     </Container>
   );

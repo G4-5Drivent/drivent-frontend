@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-function TicketBox({ children, onClick, selected }) {
+export default function TicketBox({ children, onClick, selected }) {
   return (
     <StyledTicketBox selected={selected} onClick={onClick}>
       {children}
@@ -23,6 +23,7 @@ const StyledTicketBox = styled.button`
   :hover{
     background-color: #FFEED2;
     cursor: pointer;
+    transform: scale(1.02);
   }
 
   h1 {
@@ -40,5 +41,3 @@ const StyledTicketBox = styled.button`
     color: #898989;
   }
 `;
-
-export default TicketBox;
