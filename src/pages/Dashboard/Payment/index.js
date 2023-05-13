@@ -14,10 +14,18 @@ export default function Payment() {
   });
 
   const handleTicketSelection = (category, ticket) => {
-    setSelectedTickets((prevSelectedTickets) => ({
-      ...prevSelectedTickets,
-      [category]: ticket,
-    }));
+    if (category === 'ingresso' && ticket === 'Online') {
+      setSelectedTickets((prevSelectedTickets) => ({
+        ...prevSelectedTickets,
+        [category]: ticket,
+        hospedagem: '', // reset hospedagem to an empty string when Online is selected
+      }));
+    } else {
+      setSelectedTickets((prevSelectedTickets) => ({
+        ...prevSelectedTickets,
+        [category]: ticket,
+      }));
+    }
   };
 
   const ticketPrice = {
