@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import Card from 'react-credit-cards';
+import { PaymentContext } from '../../../contexts/PaymentContext';
 
 import 'react-credit-cards/es/styles-compiled.css';
 import '../../../assets/styles/paymentForm.css';
@@ -14,6 +15,7 @@ import {
 import ConfirmButton from './ConfirmButton';
 
 export default function PaymentForm() {
+  const { setPaymentConfirmed } = useContext(PaymentContext); 
   const [state, setState] = useState({
     number: '',
     name: '',
@@ -32,6 +34,7 @@ export default function PaymentForm() {
       Expiry: ${state.expiry}
       CVC: ${state.cvc}
     `);
+    setPaymentConfirmed(true);
   };
 
   const handleCallback = ({ issuer }, isValid) => {
