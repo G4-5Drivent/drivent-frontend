@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useState } from 'react';
 
 export const useForm = (options) => {
@@ -15,13 +16,17 @@ export const useForm = (options) => {
 
   const customHandleChange = (key, sanitizeFn) => (inputValue) => {
     const value = sanitizeFn ? sanitizeFn(inputValue) : inputValue;
+
     setData({
       ...data,
       [key]: value,
     });
+
+    console.log(data);
   };
 
-  const handleSubmit = async(event) => {
+  // eslint-disable-next-line space-before-function-paren
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const validations = options?.validations;
     if (validations) {

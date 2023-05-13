@@ -7,6 +7,8 @@ export default function Hotel() {
       <Title>Escolha de hotel e quarto</Title>
       <OptionTitle>Primeiro, escolha seu hotel</OptionTitle>
       <HotelsList />
+      <OptionTitle>Ótima pedida! Agora escolha seu quarto:</OptionTitle>
+      <></>
     </>
   );
 }

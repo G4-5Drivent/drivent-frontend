@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-export default function Hotel({ name, image, vacancies, accomodationKind }) {
+export default function Hotel({ id, name, image, vacancies, accomodationKind, selected, handleChange }) {
   return (
-    <StyledHotel>
+    <StyledHotel selected={selected} onClick={handleCClick}>
       <StyledImage src={image} />
       <HotelName>{name}</HotelName>
       <DataTitle>Tipos de acomodação:</DataTitle>
@@ -11,6 +11,10 @@ export default function Hotel({ name, image, vacancies, accomodationKind }) {
       <Data>{vacancies}</Data>
     </StyledHotel>
   );
+
+  function handleCClick() {
+    handleChange('selectedHotel')(id);
+  }
 }
 
 const StyledHotel = styled.div`
@@ -19,9 +23,12 @@ const StyledHotel = styled.div`
   background: #ebebeb;
   border-radius: 10px;
 
+  ${({ selected }) => selected && 'background: #FFEED2;'}
+
   box-sizing: border-box;
   padding: 16px 14px;
   margin: 0 20px 20px 0;
+  cursor: pointer;
 
   overflow: hidden;
 `;
