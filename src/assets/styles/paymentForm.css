@@ -1,0 +1,59 @@
+/*
+Author: chankruze (chankruze@geekofia.in)
+Created: Mon Oct 12 2020 23:57:56 GMT+0530 (India Standard Time)
+
+Copyright (c) Geekofia 2020 and beyond
+*/
+
+.cardContainer {
+  margin-top: 5rem;
+  background-color: aquamarine;
+}
+
+.cardForm {  
+  display: flex;
+  flex-direction: column;
+}
+
+.cardForm input {
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+  outline: none;
+  color: #000;
+  font-size: 1rem;
+  font-family: "Lexend Deca", sans-serif;
+  letter-spacing: 1px;
+}
+
+.cardForm input:focus,
+.cardForm input:active {
+  border-color: rgb(0, 207, 0);
+}
+
+.cardForm .bottom {
+  display: flex;
+  flex-direction: row;
+
+}
+
+.bottom input[name="expiry"] {
+  flex: 1;
+}
+
+.bottom input[name="cvc"] {
+  width: 100px;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}

@@ -70,7 +70,7 @@ export default function Payment() {
         </TicketBox>
       </TicketBoxContainer>
 
-      {selectedTickets.ingresso && (
+      {selectedTickets.ingresso === 'Presencial' && (
         <>
           <Instruction>Ótimo! Agora escolha sua modalidade de hospedagem</Instruction>
           <TicketBoxContainer>
@@ -93,12 +93,12 @@ export default function Payment() {
         </>
       )}
 
-      {selectedTickets.hospedagem && (
+      {(selectedTickets.hospedagem || selectedTickets.ingresso === 'Online')  && (
         <>
           <Instruction>
             Fechado! O total ficou em <TotalAmount>{`R$ ${totalAmount}`}</TotalAmount>. Agora é só confirmar:
           </Instruction>
-          <ConfirmButton onClick={handleConfirmPayment}/>
+          <ConfirmButton onClick={handleConfirmPayment} label={'RESERVAR INGRESSO'}/>
         </>
       )}
     </Container>
