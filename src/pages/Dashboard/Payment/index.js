@@ -1,13 +1,17 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 import Title from '../../../components/Dashboard/Payment/Title';
 import Instruction from '../../../components/Dashboard/Payment/Instruction';
 import TicketBox from '../../../components/Dashboard/Payment/TicketBox';
 import ConfirmButton from '../../../components/Dashboard/Payment/ConfirmButton';
 import ConfirmPayment from '../../../components/Dashboard/Payment/ConfirmPayment';
+import TicketsTypesInfoContext from '../../../contexts/TicketsTypesContext';
+import { PaymentContext } from '../../../contexts/PaymentContext';
 
 export default function Payment() {
+  const { ticketsTypesInfo, loadingTicketsTypesInfo } = useContext(TicketsTypesInfoContext);
+  console.log(ticketsTypesInfo);
   const [selectedTickets, setSelectedTickets] = useState({
     ingresso: '',
     hospedagem: '',
@@ -28,14 +32,20 @@ export default function Payment() {
     }
   };
 
+  const presentialWithoutHotel = ticketsTypesInfo.find(
+    (ticketType) => !ticketType.isRemote && !ticketType.includesHotel
+  );
+  const presentialWithHotel = ticketsTypesInfo.find((ticketType) => !ticketType.isRemote && ticketType.includesHotel);
+  const online = ticketsTypesInfo.find((ticketType) => ticketType.isRemote);
+
   const ticketPrice = {
-    Presencial: 250,
-    Online: 100,
+    Presencial: presentialWithoutHotel.price,
+    Online: online.price,
   };
 
   const hotelPrice = {
     'Sem Hotel': 0,
-    'Com Hotel': 350,
+    'Com Hotel': presentialWithHotel.price - presentialWithoutHotel.price,
   };
 
   const selectedTicketPrice = selectedTickets.ingresso ? ticketPrice[selectedTickets.ingresso] : 0;
@@ -43,6 +53,12 @@ export default function Payment() {
   const totalAmount = selectedTicketPrice + selectedHotelPrice;
 
   const [isPaymentConfirmed, setIsPaymentConfirmed] = useState(false);
+
+  const ticketTypeId = (() => {
+    if (totalAmount === presentialWithHotel.price) return presentialWithHotel.id;
+    if (totalAmount === presentialWithoutHotel.price) return presentialWithoutHotel.id;
+    if (totalAmount === online.price) return online.id;
+  })();
 
   const handleConfirmPayment = () => {
     setIsPaymentConfirmed(true);
@@ -52,7 +68,13 @@ export default function Payment() {
     return (
       <Container>
         <Title>Ingresso e pagamento</Title>
-        <ConfirmPayment ticket={selectedTickets.ingresso} hotel={selectedTickets.hospedagem} totalAmount={totalAmount} />
+        <ConfirmPayment
+          setIsPaymentConfirmed={setIsPaymentConfirmed}
+          ticket={selectedTickets.ingresso}
+          ticketTypeId={ticketTypeId}
+          hotel={selectedTickets.hospedagem}
+          totalAmount={totalAmount}
+        />
       </Container>
     );
   }
@@ -66,7 +88,7 @@ export default function Payment() {
           onClick={() => handleTicketSelection('ingresso', 'Presencial')}
         >
           <h1>Presencial</h1>
-          <h2>R$ 250</h2>
+          <h2>{ticketPrice.Presencial}</h2>
         </TicketBox>
 
         <TicketBox
@@ -74,7 +96,7 @@ export default function Payment() {
           onClick={() => handleTicketSelection('ingresso', 'Online')}
         >
           <h1>Online</h1>
-          <h2>R$ 100</h2>
+          <h2>{ticketPrice.Online}</h2>
         </TicketBox>
       </TicketBoxContainer>
 
@@ -95,18 +117,18 @@ export default function Payment() {
               onClick={() => handleTicketSelection('hospedagem', 'Com Hotel')}
             >
               <h1>Com Hotel</h1>
-              <h2>+ R$ 350</h2>
+              <h2>+ {hotelPrice['Com Hotel']}</h2>
             </TicketBox>
           </TicketBoxContainer>
         </>
       )}
 
-      {(selectedTickets.hospedagem || selectedTickets.ingresso === 'Online')  && (
+      {(selectedTickets.hospedagem || selectedTickets.ingresso === 'Online') && (
         <>
           <Instruction>
             Fechado! O total ficou em <TotalAmount>{`R$ ${totalAmount}`}</TotalAmount>. Agora é só confirmar:
           </Instruction>
-          <ConfirmButton onClick={handleConfirmPayment} label={'RESERVAR INGRESSO'}/>
+          <ConfirmButton onClick={handleConfirmPayment} label={'RESERVAR INGRESSO'} />
         </>
       )}
     </Container>

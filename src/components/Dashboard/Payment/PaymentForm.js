@@ -13,9 +13,12 @@ import {
   formatFormData,
 } from '../../../assets/utils/PaymentFormUtils';
 import ConfirmButton from './ConfirmButton';
+import useTicket from '../../../hooks/api/useTicket';
+import usePayment from '../../../hooks/api/usePayment';
 
-export default function PaymentForm() {
-  const { setPaymentConfirmed } = useContext(PaymentContext); 
+export default function PaymentForm({ ticketTypeId, setIsPaymentConfirmed }) {
+  const { setPaymentConfirmed } = useContext(PaymentContext);
+
   const [state, setState] = useState({
     number: '',
     name: '',
@@ -26,16 +29,8 @@ export default function PaymentForm() {
     formData: null,
   });
 
-  const handleConfirm = () => {
-    alert(`
-      Card information:
-      Number: ${state.number}
-      Name: ${state.name}
-      Expiry: ${state.expiry}
-      CVC: ${state.cvc}
-    `);
-    setPaymentConfirmed(true);
-  };
+  const { postPayment } = usePayment();
+  const { postTicket } = useTicket();
 
   const handleCallback = ({ issuer }, isValid) => {
     if (isValid) {
@@ -69,18 +64,34 @@ export default function PaymentForm() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
+    console.log(e.target);
+    const ticket = await postTicket(ticketTypeId);
+ 
+    const payment = await postPayment(
+      ticket.id,
+      {
+        issuer: state.issuer,
+        number: state.number,
+        name: state.name,
+        expirationDate: state.expiry,
+        cvv: state.cvc,
+      },
+    );
+    if (payment.id) {
+      setPaymentConfirmed(true);
+    }
 
-    const formData = [...e.target.elements]
-      .filter((d) => d.name)
-      .reduce((acc, d) => {
-        acc[d.name] = d.value;
-        return acc;
-      }, {});
+    const formData = {
+      number: state.number,
+      name: state.name,
+      expiry: state.expiry,
+      cvc: state.cvc,
+    };
 
     setState((prevState) => ({ ...prevState, formData }));
-    e.target.reset();
+    setState({ number: '', name: '', expiry: '', cvc: '' });
   };
 
   const formattedFormData = state.formData ? formatFormData(state.formData) : [];
@@ -99,7 +110,7 @@ export default function PaymentForm() {
           />
         </CardContainer>
         <FormContainer>
-          <form onSubmit={handleSubmit} className="cardForm">
+          <form className="cardForm">
             <input
               type="tel"
               name="number"
@@ -149,7 +160,7 @@ export default function PaymentForm() {
           )}
         </FormContainer>
       </Container>
-      <ConfirmButton label={'FINALIZAR PAGAMENTO'} onClick={handleConfirm} />
+      <ConfirmButton onClick={handleSubmit} label={'FINALIZAR PAGAMENTO'} />
     </>
   );
 }

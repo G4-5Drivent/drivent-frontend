@@ -5,7 +5,7 @@ import PaymentForm from './PaymentForm';
 import { PaymentContext } from '../../../contexts/PaymentContext';
 import PaymentConfimed from './PaymentConfimed';
 
-export default function ConfirmPayment({ ticket, hotel, totalAmount }) {
+export default function ConfirmPayment({ ticket, ticketTypeId, hotel, totalAmount, setIsPaymentConfirmed }) {
   const { paymentConfirmed } = useContext(PaymentContext);
 
   return (
@@ -18,11 +18,7 @@ export default function ConfirmPayment({ ticket, hotel, totalAmount }) {
         <h2>R$ {totalAmount}</h2>
       </OrderSummaryBox>
       <Instruction> Pagamento </Instruction>
-      {paymentConfirmed ? (
-        <PaymentConfimed />
-      ) : (
-        <PaymentForm />
-      )}
+      {paymentConfirmed ? <PaymentConfimed /> : <PaymentForm setIsPaymentConfirmed={ setIsPaymentConfirmed } ticketTypeId={ticketTypeId} />}
     </>
   );
 }
