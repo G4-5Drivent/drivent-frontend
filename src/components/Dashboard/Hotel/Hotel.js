@@ -22,6 +22,8 @@ const StyledHotel = styled.div`
   box-sizing: border-box;
   padding: 16px 14px;
   margin: 0 20px 20px 0;
+
+  overflow: hidden;
 `;
 
 const HotelName = styled.h3`
@@ -32,6 +34,10 @@ const HotelName = styled.h3`
   line-height: 23px;
   color: #343434;
   margin: 10px 0;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const DataTitle = styled.h4`

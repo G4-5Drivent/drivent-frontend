@@ -9,15 +9,18 @@ export default function HotelsList() {
 
   return (
     <StyledBox>
-      {hotels.map((hotel) => (
-        <Hotel
-          name={hotel.name}
-          image={hotel.image}
-          accomodationKind={hotel}
-          vacancies={hotel.vacancies}
-          key={hotel.id}
-        />
-      ))}
+      {hotels.map(
+        (hotel) =>
+          hotel.capacity > 0 && (
+            <Hotel
+              name={hotel.name}
+              image={hotel.image}
+              accomodationKind={hotel.roomTypes}
+              vacancies={hotel.capacity}
+              key={hotel.id}
+            />
+          )
+      )}
     </StyledBox>
   );
 }
