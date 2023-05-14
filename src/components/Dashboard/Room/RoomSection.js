@@ -4,14 +4,13 @@ import useRoom from '../../../hooks/api/useRoom';
 import { OptionTitle } from '../Hotel';
 import { useEffect, useRef } from 'react';
 
-export default function RoomSection({ hotelId }) {
+export default function RoomSection({ selection, setSelection }) {
   const componentRef = useRef(null);
+  const { hotel: hotelId } = selection;
 
   useEffect(() => {
-    if (componentRef.current) {
-      componentRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [componentRef, hotelId]);
+    focusOn(componentRef);
+  }, [hotelId]);
 
   if (!hotelId || hotelId === undefined) return null;
 
@@ -29,6 +28,12 @@ export default function RoomSection({ hotelId }) {
       </StyledBox>
     </>
   );
+}
+
+function focusOn(ref) {
+  if (ref.current) {
+    ref.current.scrollIntoView({ behavior: 'smooth' });
+  }
 }
 
 const StyledBox = styled.div`

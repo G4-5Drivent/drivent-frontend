@@ -14,7 +14,9 @@ export default function Hotel() {
       <Title>Escolha de hotel e quarto</Title>
 
       <HotelSection selection={selection} setSelection={setSelection} />
-      {selection.hotel > 0 && <RoomSection hotelId={selection.hotel} />}
+      {selection.hotel > 0 && (
+        <RoomSection hotelId={selection.hotel} selection={selection} setSelection={setSelection} />
+      )}
     </>
   );
 }
