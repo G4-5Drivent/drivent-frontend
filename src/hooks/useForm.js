@@ -21,7 +21,8 @@ export const useForm = (options) => {
     });
   };
 
-  const handleSubmit = async(event) => {
+  // eslint-disable-next-line space-before-function-paren
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const validations = options?.validations;
     if (validations) {
