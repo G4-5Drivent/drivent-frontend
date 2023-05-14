@@ -7,7 +7,6 @@ export const Title = styled.h1`
   font-size: 34px;
   line-height: 40px;
   color: #000000;
-  margin-bottom: 36px;
 `;
 
 export const OptionTitle = styled.h2`
@@ -17,5 +16,6 @@ export const OptionTitle = styled.h2`
   font-size: 20px;
   line-height: 23px;
   color: #8e8e8e;
-  margin-bottom: 18px;
+  margin-bottom: 25px;
+  margin-top: 33px;
 `;

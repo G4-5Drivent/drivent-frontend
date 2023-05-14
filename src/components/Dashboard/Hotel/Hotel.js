@@ -26,13 +26,13 @@ export default function Hotel({ id, name, image, vacancies, accomodationKind, se
   }
 }
 
-const StyledHotel = styled.div`
+const StyledHotel = styled.button`
   width: 196px;
   height: 264px;
-  background: #ebebeb;
+
   border-radius: 10px;
 
-  ${({ selected }) => selected && 'background: #FFEED2;'}
+  ${({ selected }) => (selected ? 'background: red;' : 'background: #ebebeb;')}
 
   box-sizing: border-box;
   padding: 16px 14px;
@@ -40,6 +40,7 @@ const StyledHotel = styled.div`
   cursor: pointer;
 
   overflow: hidden;
+  border: none;
 `;
 
 const HotelName = styled.h3`

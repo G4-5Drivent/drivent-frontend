@@ -20,7 +20,7 @@ export default function HotelsList({ selection, setSelection }) {
               accomodationKind={hotel.roomTypes}
               vacancies={hotel.capacity}
               key={hotel.id}
-              selectedHotel={selection.hotel === hotel.id}
+              selected={selection.hotel === hotel.id}
               selection={selection}
               setSelection={setSelection}
             />
