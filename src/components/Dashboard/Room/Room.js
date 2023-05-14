@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { MdPersonOutline as PersonIcon } from 'react-icons/md';
 
-export default function Room({ capacity, name }) {
+export default function Room({ capacity, name, selected, selection, setSelection, id }) {
   const personArr = numberToArray(capacity);
 
   return (
-    <StyledRoom>
+    <StyledRoom onClick={handleClick} selected={selected}>
       <RoomName>{name}</RoomName>
       <IconsBox>
         {personArr.map((item) => (
@@ -14,6 +14,11 @@ export default function Room({ capacity, name }) {
       </IconsBox>
     </StyledRoom>
   );
+
+  function handleClick() {
+    const newData = { ...selection, room: id };
+    setSelection(newData);
+  }
 }
 
 function numberToArray(number) {

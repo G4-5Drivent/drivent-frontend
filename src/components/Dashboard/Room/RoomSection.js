@@ -23,7 +23,14 @@ export default function RoomSection({ selection, setSelection }) {
       <OptionTitle ref={componentRef}>Ótima pedida! Agora escolha seu quarto:</OptionTitle>
       <StyledBox>
         {rooms.map((room) => (
-          <Room capacity={room.capacity} name={room.name} />
+          <Room
+            id={room.id}
+            capacity={room.capacity}
+            name={room.name}
+            selected={room.id === selection.room}
+            selection={selection}
+            setSelection={setSelection}
+          />
         ))}
       </StyledBox>
     </>

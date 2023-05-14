@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Title } from '../../../components/Dashboard/Hotel';
+import { StyledButton, Title } from '../../../components/Dashboard/Hotel';
 import HotelSection from '../../../components/Dashboard/Hotel/HotelsSection';
 import RoomSection from '../../../components/Dashboard/Room/RoomSection';
 
@@ -17,6 +17,7 @@ export default function Hotel() {
       {selection.hotel > 0 && (
         <RoomSection hotelId={selection.hotel} selection={selection} setSelection={setSelection} />
       )}
+      {selection.room > 0 && selection.hotel > 0 && <StyledButton>RESERVAR QUARTO</StyledButton>}
     </>
   );
 }
