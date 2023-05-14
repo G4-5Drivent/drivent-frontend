@@ -7,5 +7,5 @@ export async function getRoomsFromHotel(token, hotelId) {
     },
   });
 
-  return response.data;
+  return response.data.Rooms;
 }
