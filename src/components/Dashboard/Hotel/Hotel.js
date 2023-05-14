@@ -1,19 +1,28 @@
+import { useEffect } from 'react';
 import styled from 'styled-components';
 
-export default function Hotel({ id, name, image, vacancies, accomodationKind, selected, handleChange }) {
+export default function Hotel({ id, name, image, vacancies, accomodationKind, selected, selection, setSelection }) {
   return (
-    <StyledHotel selected={selected} onClick={handleCClick}>
+    <StyledHotel selected={selected} onClick={handleClick}>
       <StyledImage src={image} />
+
       <HotelName>{name}</HotelName>
+
       <DataTitle>Tipos de acomodação:</DataTitle>
       <Data>{accomodationKind}</Data>
+
       <DataTitle>Vagas disponíveis:</DataTitle>
       <Data>{vacancies}</Data>
     </StyledHotel>
   );
 
-  function handleCClick() {
-    handleChange('selectedHotel')(id);
+  function handleClick() {
+    const newData = {
+      ...selection,
+      hotel: id,
+    };
+    setSelection(newData);
+    console.log(selection);
   }
 }
 

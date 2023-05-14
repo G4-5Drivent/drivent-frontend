@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useState } from 'react';
 
 export const useForm = (options) => {
@@ -16,13 +15,10 @@ export const useForm = (options) => {
 
   const customHandleChange = (key, sanitizeFn) => (inputValue) => {
     const value = sanitizeFn ? sanitizeFn(inputValue) : inputValue;
-
     setData({
       ...data,
       [key]: value,
     });
-
-    console.log(data);
   };
 
   // eslint-disable-next-line space-before-function-paren
