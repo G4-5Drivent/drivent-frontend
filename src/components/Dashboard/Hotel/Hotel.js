@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import styled from 'styled-components';
 
 export default function Hotel({ id, name, image, vacancies, accomodationKind, selected, selection, setSelection }) {
@@ -22,7 +21,6 @@ export default function Hotel({ id, name, image, vacancies, accomodationKind, se
       hotel: id,
     };
     setSelection(newData);
-    console.log(selection);
   }
 }
 
@@ -32,7 +30,7 @@ const StyledHotel = styled.button`
 
   border-radius: 10px;
 
-  ${({ selected }) => (selected ? 'background: red;' : 'background: #ebebeb;')}
+  ${({ selected }) => (selected ? 'background: #FFEED2;' : 'background: #ebebeb;')}
 
   box-sizing: border-box;
   padding: 16px 14px;

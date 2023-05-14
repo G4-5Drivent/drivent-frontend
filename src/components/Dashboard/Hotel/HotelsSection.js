@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import useHotel from '../../../hooks/api/useHotel';
 import Hotel from './Hotel';
-import { OptionTitle } from '../../../components/Dashboard/Hotel';
+import { OptionTitle } from '.';
 
 export default function HotelSection({ selection, setSelection }) {
   const { hotels } = useHotel();
 
-  if (!hotels) return null;
+  if (!hotels) return <OptionTitle>Parece que você não tem um ticket, tente criar um e volte aqui!</OptionTitle>;
 
   return (
     <>

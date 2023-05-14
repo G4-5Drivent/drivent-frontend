@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import { MdPersonOutline as PersonIcon } from 'react-icons/md';
 
-export default function Room({ capacity }) {
+export default function Room({ capacity, name }) {
   const personArr = numberToArray(capacity);
 
   return (
     <StyledRoom>
-      <RoomName>101</RoomName>
+      <RoomName>{name}</RoomName>
       <IconsBox>
         {personArr.map((item) => (
           <PersonIcon size={30} color="#CECECE" />
@@ -34,11 +34,14 @@ const StyledRoom = styled.div`
   box-sizing: border-box;
   padding: 11px 16px;
 
+  ${({ selected }) => (selected ? 'background: #FFEED2;' : 'background: #fff;')}
+
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   cursor: pointer;
+  margin: 0 17px 17px 0;
 `;
 
 const IconsBox = styled.div`
