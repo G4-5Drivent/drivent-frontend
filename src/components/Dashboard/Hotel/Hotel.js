@@ -27,9 +27,6 @@ export default function Hotel({ id, name, image, vacancies, accomodationKind, se
 const StyledHotel = styled.button`
   width: 196px;
   height: 264px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
 
   border-radius: 10px;
 
@@ -42,12 +39,11 @@ const StyledHotel = styled.button`
 
   overflow: hidden;
   border: none;
-
-  
+  ali
 `;
 
 const HotelName = styled.h3`
-  //font-family: 'Roboto';
+  font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
@@ -61,7 +57,7 @@ const HotelName = styled.h3`
 `;
 
 const DataTitle = styled.h4`
-  //font-family: 'Roboto';
+  font-family: 'Roboto';
   font-style: normal;
   font-weight: 700;
   font-size: 12px;
@@ -71,7 +67,7 @@ const DataTitle = styled.h4`
 `;
 
 const Data = styled.p`
-  //font-family: 'Roboto';
+  font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
