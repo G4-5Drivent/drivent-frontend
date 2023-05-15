@@ -39,7 +39,6 @@ const StyledHotel = styled.button`
 
   overflow: hidden;
   border: none;
-  ali
 `;
 
 const HotelName = styled.h3`

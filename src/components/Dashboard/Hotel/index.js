@@ -20,6 +20,25 @@ export const OptionTitle = styled.h2`
   margin-top: 33px;
 `;
 
+export const Message = styled.h4`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 23px;
+  text-align: center;
+
+  color: #8e8e8e;
+
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 180px;
+`;
+
 export const StyledButton = styled.button`
   width: 182px;
   height: 37px;

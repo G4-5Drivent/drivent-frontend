@@ -15,7 +15,7 @@ export default function useRoom(hotelId) {
 
   useEffect(() => {
     if (hotelId) {
-      getRooms(); // Call the act function to fetch rooms when hotelId changes
+      getRooms();
     }
   }, [hotelId]);
 
