@@ -55,7 +55,7 @@ const IconsBox = styled.div`
 `;
 
 const RoomName = styled.h3`
-  font-family: 'Roboto';
+  //font-family: 'Roboto';
   font-style: normal;
   font-weight: 700;
   font-size: 20px;

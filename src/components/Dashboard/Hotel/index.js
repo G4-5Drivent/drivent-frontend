@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Title = styled.h1`
-  font-family: 'Roboto';
+  //font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
   font-size: 34px;
@@ -10,7 +10,7 @@ export const Title = styled.h1`
 `;
 
 export const OptionTitle = styled.h2`
-  font-family: 'Roboto';
+  //font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
@@ -34,7 +34,7 @@ export const StyledButton = styled.button`
   justify-content: center;
   align-items: center;
 
-  font-family: 'Roboto';
+  //font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;

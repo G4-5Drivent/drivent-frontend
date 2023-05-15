@@ -12,7 +12,7 @@ export default function useHotel() {
     error: hotelsError,
     act: getHotels,
   } = useAsync(() => hotelApi.getHotelsInfo(token));
-
+  console.log(hotels);
   return {
     hotels,
     hotelsLoading,

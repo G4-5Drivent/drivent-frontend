@@ -138,7 +138,7 @@ export default function Payment() {
 const Container = styled.div`
   width: 100%;
   height: 100%;
-  font-family: 'Roboto', sans-serif;
+  //font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: 400;
 `;
