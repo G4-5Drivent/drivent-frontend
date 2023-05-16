@@ -30,6 +30,7 @@ export default function RoomSection({ selection, setSelection }) {
             selected={room.id === selection.room}
             selection={selection}
             setSelection={setSelection}
+            bookings={room.Booking}
           />
         ))}
       </StyledBox>

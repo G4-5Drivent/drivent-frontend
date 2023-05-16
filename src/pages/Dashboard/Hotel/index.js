@@ -11,23 +11,21 @@ export default function Hotel() {
     room: -1,
   });
 
-  const { ticketsTypes } = useTicketsTypes();
+  // const { ticketsTypes } = useTicketsTypes();
+  // if (ticketsTypes === null) return <Message message="Carregando" />;
 
-  if (ticketsTypes === null) return <Message message="Carregando" />;
+  // const ticketIncludesHotel = ticketsTypes.some((ticket) => ticket.isRemote || !ticket.includesHotel);
+  // if (!ticketIncludesHotel)
+  //   return (
+  //     <MessageBox
+  //       message="Sua modalidade de ingresso não inclui hospedagem
+  //                 Prossiga para a escolha de atividades"
+  //     />
+  //   );
 
-  const ticketIncludesHotel = ticketsTypes.some((ticket) => ticket.isRemote || !ticket.includesHotel);
-
-  if (!ticketIncludesHotel)
-    return (
-      <MessageBox
-        message="Sua modalidade de ingresso não inclui hospedagem
-                  Prossiga para a escolha de atividades"
-      />
-    );
-
-  const userHasNotPaidTicket = ticketsTypes.every((ticket) => ticket.paid);
-  if (userHasNotPaidTicket)
-    return <MessageBox message="Você ainda não pagou o seu ingresso. Prossiga para a escolha de atividades" />;
+  // const userHasNotPaidTicket = ticketsTypes.every((ticket) => ticket.paid);
+  // if (userHasNotPaidTicket)
+  //   return <MessageBox message="Você ainda não pagou o seu ingresso. Prossiga para a escolha de atividades" />;
 
   return (
     <>
