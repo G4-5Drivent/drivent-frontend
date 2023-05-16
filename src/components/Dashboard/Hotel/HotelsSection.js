@@ -6,7 +6,7 @@ import { OptionTitle } from '.';
 export default function HotelSection({ selection, setSelection }) {
   const { hotels } = useHotel();
 
-  if (!hotels) return <OptionTitle>Parece que você não tem um ticket, tente criar um e volte aqui!</OptionTitle>;
+  if (!hotels) return null;
 
   return (
     <>
