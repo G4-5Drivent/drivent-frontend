@@ -14,11 +14,13 @@ export default function useAsync(handler, immediate = true) {
       const data = await handler(...args);
       setData(data);
       setLoading(false);
+      console.log('Data received:', data); // new debug line
       return data;
     } catch (err) {
+      console.log('Caught an error:', err); // new debug line
       setError(err);
       setLoading(false);
-      throw err;
+      //throw err;
     }
   };
 

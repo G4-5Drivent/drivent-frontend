@@ -5,17 +5,24 @@ import RoomSection from '../../../components/Dashboard/Room/RoomSection';
 import useTicketsTypes from '../../../hooks/api/useTicketsTypes';
 import styled from 'styled-components';
 
+import useGetTicket from '../../../hooks/api/useGetTicket';
+
 export default function Hotel() {
   const [selection, setSelection] = useState({
     hotel: -1,
     room: -1,
   });
 
-  const { ticketsTypes } = useTicketsTypes();
-  if (ticketsTypes === null) return <Message message="Carregando" />;
+  const { tickets, ticketsLoading, ticketsError, fetchTickets } = useGetTicket();
+  console.log('Error:', ticketsError); // new debug line
+  if (ticketsError) {
+    console.log('Rendering error message.'); // new debug line
+    return (<MessageBox message="Você ainda não comprou o seu ingresso. Prossiga para a escolha de atividades" />);
+  }
 
-  const ticketIncludesHotel = ticketsTypes.some((ticket) => ticket.isRemote || !ticket.includesHotel);
-  if (!ticketIncludesHotel)
+  if (ticketsLoading) return <Message message="Carregando" />;
+
+  if (!tickets.TicketType.includesHotel)
     return (
       <MessageBox
         message="Sua modalidade de ingresso não inclui hospedagem
@@ -23,8 +30,8 @@ export default function Hotel() {
       />
     );
 
-  const userHasNotPaidTicket = ticketsTypes.every((ticket) => ticket.paid);
-  if (userHasNotPaidTicket)
+  //const userHasNotPaidTicket = ticketsTypes.every((ticket) => ticket.paid);
+  if (tickets.status !== 'PAID')
     return <MessageBox message="Você ainda não pagou o seu ingresso. Prossiga para a escolha de atividades" />;
 
   return (
