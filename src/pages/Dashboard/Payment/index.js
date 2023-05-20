@@ -8,10 +8,13 @@ import ConfirmButton from '../../../components/Dashboard/Payment/ConfirmButton';
 import ConfirmPayment from '../../../components/Dashboard/Payment/ConfirmPayment';
 import TicketsTypesInfoContext from '../../../contexts/TicketsTypesContext';
 import { PaymentContext } from '../../../contexts/PaymentContext';
+import useGetTicket from '../../../hooks/api/useGetTicket';
+import OrderSummaryBox from '../../../components/Dashboard/Payment/OrderSummaryBox';
+import PaymentConfirmed from '../../../components/Dashboard/Payment/PaymentConfimed';
 
 export default function Payment() {
   const { ticketsTypesInfo, loadingTicketsTypesInfo } = useContext(TicketsTypesInfoContext);
-  console.log(ticketsTypesInfo);
+  let paidTicket = false;
   const [selectedTickets, setSelectedTickets] = useState({
     ingresso: '',
     hospedagem: '',
@@ -64,6 +67,39 @@ export default function Payment() {
     setIsPaymentConfirmed(true);
   };
 
+  const ticketInfo = {
+    tipo: null,
+    hospedagem: null,
+    price: null,
+  };
+
+  const { tickets, ticketsLoading } = useGetTicket();
+  if (ticketsLoading) {
+    return <Instruction> Carregando ...</Instruction>;
+  } else if (tickets) {
+    console.log(tickets.TicketType);
+    paidTicket = true;
+    ticketInfo.tipo = tickets.TicketType.name.slice(0, 1) === 'P' ? 'Presencial' : 'Online';
+    ticketInfo.hospedagem = tickets.TicketType.includesHotel ? 'Com Hotel' : '';
+    ticketInfo.price = tickets.TicketType.price;
+  }
+
+  if (paidTicket) {
+    return (
+      <Container>
+        <Title> Ingresso Escolhido</Title>
+        <OrderSummaryBox>
+          <h1>
+            {ticketInfo.tipo} {ticketInfo.hospedagem && `+ ${ticketInfo.hospedagem}`}
+          </h1>
+          <h2>R$ {ticketInfo.price}</h2>
+        </OrderSummaryBox>
+        <Instruction> Pagamento </Instruction>
+        <PaymentConfirmed />
+      </Container>
+    );
+  }
+
   if (isPaymentConfirmed) {
     return (
       <Container>
@@ -88,7 +124,7 @@ export default function Payment() {
           onClick={() => handleTicketSelection('ingresso', 'Presencial')}
         >
           <h1>Presencial</h1>
-          <h2>{ticketPrice.Presencial}</h2>
+          <h2>R$ {ticketPrice.Presencial}</h2>
         </TicketBox>
 
         <TicketBox
@@ -96,7 +132,7 @@ export default function Payment() {
           onClick={() => handleTicketSelection('ingresso', 'Online')}
         >
           <h1>Online</h1>
-          <h2>{ticketPrice.Online}</h2>
+          <h2>R$ {ticketPrice.Online}</h2>
         </TicketBox>
       </TicketBoxContainer>
 
