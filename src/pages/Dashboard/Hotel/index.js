@@ -14,9 +14,8 @@ export default function Hotel() {
   });
 
   const { tickets, ticketsLoading, ticketsError, fetchTickets } = useGetTicket();
-  console.log('Error:', ticketsError); // new debug line
-  if (ticketsError) {
-    console.log('Rendering error message.'); // new debug line
+  
+  if (ticketsError) {// new debug line
     return (<MessageBox message="Você ainda não comprou o seu ingresso. Prossiga para a escolha de atividades" />);
   }
 
