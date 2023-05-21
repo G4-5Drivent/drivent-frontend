@@ -14,11 +14,16 @@ export function TicketsTypesInfoProvider({ children }) {
     return <Splash loading />;
   }
 
-  if (ticketsTypesError) {
-    let message = ticketsTypesError.response
+  if (!ticketsTypes || ticketsTypesError) {
+    let message = ticketsTypesError?.response
       ? ticketsTypesError.response.data.message
       : 'Could not connect to server. Please try again later.';
     return <Splash message={message} />;
+  }
+
+  // Add this check
+  if (!ticketsTypes) {
+    return <Splash message="Please sign in to view ticket types." />;
   }
 
   return (
@@ -29,3 +34,4 @@ export function TicketsTypesInfoProvider({ children }) {
     </TicketsTypesInfoContext.Provider>
   );
 }
+
