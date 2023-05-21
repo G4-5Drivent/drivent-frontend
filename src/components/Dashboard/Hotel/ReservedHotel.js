@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { DataTitle, HotelName, StyledHotel, StyledImage, Data, StyledButton } from '.';
+import { StyledHotel, HotelName, DataTitle, Data, StyledImage, StyledButton } from '.';
 import useRoom from '../../../hooks/api/useRoom';
-import { MessageBox } from '../../../layouts/Dashboard';
+import MessageBox from '../../MessageBox';
 
 export default function ReservedHotel({ name, image, roomName, roomType, hotelId, roomId, handleClick }) {
   const { rooms } = useRoom(hotelId);
@@ -21,7 +21,7 @@ export default function ReservedHotel({ name, image, roomName, roomType, hotelId
         <Data>{`${roomName} (${roomType})`}</Data>
 
         <DataTitle>Pessoas no seu quarto:</DataTitle>
-        <Data>{getRoomText()}</Data>
+        <Data>{getRoomText}</Data>
       </StyledHotel>
       <StyledButton onClick={handleClick}>TROCAR DE QUARTO</StyledButton>
     </StyledBox>

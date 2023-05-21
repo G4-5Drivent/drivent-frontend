@@ -9,7 +9,10 @@ export default function useBooking() {
 
   console.log('BOOKING GOT >> ', booking);
 
-  const { act: createBooking, error: createBookingError } = useAsync(() => bookingApi.createBooking(token), false);
+  const { act: createBooking, error: createBookingError } = useAsync(
+    (roomId) => bookingApi.createBooking(token, roomId),
+    false
+  );
 
   const { act: updateBooking, error: updateBookingError } = useAsync(
     (bookingId, roomId) => bookingApi.updateBooking(token, bookingId, roomId),

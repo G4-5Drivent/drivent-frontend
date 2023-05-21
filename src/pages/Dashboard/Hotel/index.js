@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import useGetTicket from '../../../hooks/api/useGetTicket';
 import useBooking from '../../../hooks/api/useBooking';
 import MessageBox from '../../../components/MessageBox';
+import { toast } from 'react-toastify';
 
 export default function Hotel() {
   const [selection, setSelection] = useState({
@@ -17,6 +18,7 @@ export default function Hotel() {
   const [changingRoom, setChangingRoom] = useState(false);
 
   const { tickets, ticketsLoading, ticketsError, fetchTickets } = useGetTicket();
+  const { updateBooking, createBooking } = useBooking();
 
   if (ticketsError) {
     return <MessageBox message="Você ainda não comprou o seu ingresso. Prossiga para a escolha de atividades" />;
@@ -43,9 +45,21 @@ export default function Hotel() {
       {selection.hotel > 0 && (
         <RoomSection hotelId={selection.hotel} selection={selection} setSelection={setSelection} />
       )}
-      {selection.room > 0 && selection.hotel > 0 && <StyledButton>RESERVAR QUARTO</StyledButton>}
+      {selection.room > 0 && selection.hotel > 0 && <StyledButton onClick={handleClick}>RESERVAR QUARTO</StyledButton>}
     </>
   );
 
-  function handleClick() {}
+  async function handleClick() {
+    try {
+      if (changingRoom) {
+        await updateBooking(selection.room);
+        toast('Quarto alterado com sucesso!');
+      } else {
+        await createBooking(selection.room);
+        toast('Quarto reservado com sucesso!');
+      }
+    } catch (error) {
+      toast.error('Erro ao reservar quarto');
+    }
+  }
 }

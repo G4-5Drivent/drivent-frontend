@@ -25,6 +25,7 @@ export default function RoomSection({ selection, setSelection }) {
         {rooms.map((room) => (
           <Room
             id={room.id}
+            key={room.id}
             capacity={room.capacity}
             name={room.name}
             selected={room.id === selection.room}
