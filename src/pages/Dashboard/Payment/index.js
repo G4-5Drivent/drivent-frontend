@@ -11,14 +11,24 @@ import { PaymentContext } from '../../../contexts/PaymentContext';
 import useGetTicket from '../../../hooks/api/useGetTicket';
 import OrderSummaryBox from '../../../components/Dashboard/Payment/OrderSummaryBox';
 import PaymentConfirmed from '../../../components/Dashboard/Payment/PaymentConfimed';
+import useTicket from '../../../hooks/api/useTicket';
 
 export default function Payment() {
-  const { ticketsTypesInfo, loadingTicketsTypesInfo } = useContext(TicketsTypesInfoContext);
+  const { postTicket } = useTicket();
+  const { ticketsTypesInfo } = useContext(TicketsTypesInfoContext);
+  const { setPaymentConfirmed } = useContext(PaymentContext);
   let paidTicket = false;
+  let reservedTicket = false;
   const [selectedTickets, setSelectedTickets] = useState({
     ingresso: '',
     hospedagem: '',
   });
+  const { tickets, ticketsLoading } = useGetTicket();
+  const presentialWithoutHotel = ticketsTypesInfo.find(
+    (ticketType) => !ticketType.isRemote && !ticketType.includesHotel
+  );
+  const presentialWithHotel = ticketsTypesInfo.find((ticketType) => !ticketType.isRemote && ticketType.includesHotel);
+  const online = ticketsTypesInfo.find((ticketType) => ticketType.isRemote);
 
   const handleTicketSelection = (category, ticket) => {
     if (category === 'ingresso' && ticket === 'Online') {
@@ -35,12 +45,6 @@ export default function Payment() {
     }
   };
 
-  const presentialWithoutHotel = ticketsTypesInfo.find(
-    (ticketType) => !ticketType.isRemote && !ticketType.includesHotel
-  );
-  const presentialWithHotel = ticketsTypesInfo.find((ticketType) => !ticketType.isRemote && ticketType.includesHotel);
-  const online = ticketsTypesInfo.find((ticketType) => ticketType.isRemote);
-
   const ticketPrice = {
     Presencial: presentialWithoutHotel.price,
     Online: online.price,
@@ -55,17 +59,23 @@ export default function Payment() {
   const selectedHotelPrice = selectedTickets.hospedagem ? hotelPrice[selectedTickets.hospedagem] : 0;
   const totalAmount = selectedTicketPrice + selectedHotelPrice;
 
-  const [isPaymentConfirmed, setIsPaymentConfirmed] = useState(false);
+  const [isTicketReserved, setIsTicketReserved] = useState(false);
+  const [ticketId, setTicketId] = useState(null);
 
   const ticketTypeId = (() => {
     if (totalAmount === presentialWithHotel.price) return presentialWithHotel.id;
     if (totalAmount === presentialWithoutHotel.price) return presentialWithoutHotel.id;
     if (totalAmount === online.price) return online.id;
+    return null;
   })();
 
-  const handleConfirmPayment = () => {
-    setIsPaymentConfirmed(true);
-  };
+  async function reserveTicket(e) {
+    e.preventDefault();
+    setPaymentConfirmed(false);
+    const ticket = await postTicket(ticketTypeId);
+    setTicketId(ticket.id);
+    setIsTicketReserved(true);
+  }
 
   const ticketInfo = {
     tipo: null,
@@ -73,12 +83,11 @@ export default function Payment() {
     price: null,
   };
 
-  const { tickets, ticketsLoading } = useGetTicket();
   if (ticketsLoading) {
     return <Instruction> Carregando ...</Instruction>;
   } else if (tickets) {
-    console.log(tickets.TicketType);
-    paidTicket = true;
+    if (tickets.status === 'PAID') paidTicket = true;
+    else if (tickets.status === 'RESERVED') reservedTicket = true;
     ticketInfo.tipo = tickets.TicketType.name.slice(0, 1) === 'P' ? 'Presencial' : 'Online';
     ticketInfo.hospedagem = tickets.TicketType.includesHotel ? 'Com Hotel' : '';
     ticketInfo.price = tickets.TicketType.price;
@@ -100,20 +109,34 @@ export default function Payment() {
     );
   }
 
-  if (isPaymentConfirmed) {
+  if (isTicketReserved || reservedTicket) {
     return (
       <Container>
         <Title>Ingresso e pagamento</Title>
         <ConfirmPayment
-          setIsPaymentConfirmed={setIsPaymentConfirmed}
-          ticket={selectedTickets.ingresso}
-          ticketTypeId={ticketTypeId}
-          hotel={selectedTickets.hospedagem}
-          totalAmount={totalAmount}
+          ticket={
+            selectedTickets.ingresso ||
+            (tickets?.ticketTypeId === presentialWithHotel.id
+              ? 'Presencial'
+              : tickets?.ticketTypeId === presentialWithoutHotel.id
+                ? 'Presencial'
+                : 'Online')
+          }
+          ticketId={ticketId || tickets?.id}
+          hotel={
+            selectedTickets.hospedagem ||
+            (tickets?.ticketTypeId === presentialWithHotel.id
+              ? 'Com Hotel'
+              : tickets?.ticketTypeId === presentialWithoutHotel.id
+                ? 'Sem Hotel'
+                : '')
+          }
+          totalAmount={totalAmount || tickets?.TicketType.price}
         />
       </Container>
     );
   }
+
   return (
     <Container>
       <Title>Ingresso e pagamento</Title>
@@ -164,7 +187,7 @@ export default function Payment() {
           <Instruction>
             Fechado! O total ficou em <TotalAmount>{`R$ ${totalAmount}`}</TotalAmount>. Agora é só confirmar:
           </Instruction>
-          <ConfirmButton onClick={handleConfirmPayment} label={'RESERVAR INGRESSO'} />
+          <ConfirmButton onClick={(e) => reserveTicket(e)} label={'RESERVAR INGRESSO'} />
         </>
       )}
     </Container>

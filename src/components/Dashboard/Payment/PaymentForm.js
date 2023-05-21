@@ -13,10 +13,9 @@ import {
   formatFormData,
 } from '../../../assets/utils/PaymentFormUtils';
 import ConfirmButton from './ConfirmButton';
-import useTicket from '../../../hooks/api/useTicket';
 import usePayment from '../../../hooks/api/usePayment';
 
-export default function PaymentForm({ ticketTypeId, setIsPaymentConfirmed }) {
+export default function PaymentForm({ ticketId }) {
   const { setPaymentConfirmed } = useContext(PaymentContext);
 
   const [state, setState] = useState({
@@ -30,7 +29,6 @@ export default function PaymentForm({ ticketTypeId, setIsPaymentConfirmed }) {
   });
 
   const { postPayment } = usePayment();
-  const { postTicket } = useTicket();
 
   const handleCallback = ({ issuer }, isValid) => {
     if (isValid) {
@@ -66,11 +64,9 @@ export default function PaymentForm({ ticketTypeId, setIsPaymentConfirmed }) {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log(e.target);
-    const ticket = await postTicket(ticketTypeId);
  
     const payment = await postPayment(
-      ticket.id,
+      ticketId,
       {
         issuer: state.issuer,
         number: state.number,
