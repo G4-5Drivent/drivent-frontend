@@ -2,9 +2,11 @@ import styled from 'styled-components';
 import useHotel from '../../../hooks/api/useHotel';
 import Hotel from './Hotel';
 import { OptionTitle } from '.';
+import useBooking from '../../../hooks/api/useBooking';
 
-export default function HotelSection({ selection, setSelection }) {
+export default function HotelSection({ selection, setSelection, setChangingRoom }) {
   const { hotels } = useHotel();
+  const { booking } = useBooking();
 
   if (!hotels) return null;
 

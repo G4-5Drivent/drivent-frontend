@@ -7,7 +7,7 @@ export default function useBooking() {
 
   const { data: booking, loading: bookingLoading, error: bookingError } = useAsync(() => bookingApi.getBooking(token));
 
-  console.log(booking);
+  console.log('BOOKING GOT >> ', booking);
 
   const { act: createBooking, error: createBookingError } = useAsync(() => bookingApi.createBooking(token), false);
 
