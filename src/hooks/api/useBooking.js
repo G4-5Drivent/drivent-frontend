@@ -7,17 +7,17 @@ export default function useBooking() {
 
   const { data: booking, loading: bookingLoading, error: bookingError } = useAsync(() => bookingApi.getBooking(token));
 
-  console.log('BOOKING GOT >> ', booking);
+  const {
+    data: createdBooking,
+    act: createBooking,
+    error: createBookingError,
+  } = useAsync((roomId) => bookingApi.createBooking(token, roomId), false);
 
-  const { act: createBooking, error: createBookingError } = useAsync(
-    (roomId) => bookingApi.createBooking(token, roomId),
-    false
-  );
-
-  const { act: updateBooking, error: updateBookingError } = useAsync(
-    (bookingId, roomId) => bookingApi.updateBooking(token, bookingId, roomId),
-    false
-  );
+  const {
+    data: updatedBooking,
+    act: updateBooking,
+    error: updateBookingError,
+  } = useAsync((roomId) => bookingApi.updateBooking(token, booking.id, roomId), false);
 
   return {
     booking,
@@ -27,5 +27,7 @@ export default function useBooking() {
     updateBooking,
     createBookingError,
     updateBookingError,
+    createdBooking,
+    updatedBooking,
   };
 }

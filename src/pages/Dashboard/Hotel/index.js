@@ -2,9 +2,6 @@ import { Component, useState } from 'react';
 import { Message, StyledButton, Title } from '../../../components/Dashboard/Hotel';
 import HotelSection from '../../../components/Dashboard/Hotel/HotelsSection';
 import RoomSection from '../../../components/Dashboard/Room/RoomSection';
-import useTicketsTypes from '../../../hooks/api/useTicketsTypes';
-import styled from 'styled-components';
-
 import useGetTicket from '../../../hooks/api/useGetTicket';
 import useBooking from '../../../hooks/api/useBooking';
 import MessageBox from '../../../components/MessageBox';
@@ -16,9 +13,10 @@ export default function Hotel() {
     room: -1,
   });
   const [changingRoom, setChangingRoom] = useState(false);
+  const [updateRoomSuccess, setUpdateRoomSuccess] = useState(false);
 
   const { tickets, ticketsLoading, ticketsError, fetchTickets } = useGetTicket();
-  const { updateBooking, createBooking } = useBooking();
+  const { updateBooking, createBooking, updatedBooking, createdBooking } = useBooking();
 
   if (ticketsError) {
     return <MessageBox message="Você ainda não comprou o seu ingresso. Prossiga para a escolha de atividades" />;
@@ -41,7 +39,16 @@ export default function Hotel() {
     <>
       <Title>Escolha de hotel e quarto</Title>
 
-      <HotelSection selection={selection} setSelection={setSelection} changingRoom={() => setChangingRoom(true)} />
+      <HotelSection
+        selection={selection}
+        setSelection={setSelection}
+        changingRoom={changingRoom}
+        changeRoom={() => setChangingRoom(true)}
+        updateRoomSuccess={updateRoomSuccess}
+        setUpdateRoomSuccess={setUpdateRoomSuccess}
+        setChangingRoom={setChangingRoom}
+      />
+
       {selection.hotel > 0 && (
         <RoomSection hotelId={selection.hotel} selection={selection} setSelection={setSelection} />
       )}
@@ -52,12 +59,21 @@ export default function Hotel() {
   async function handleClick() {
     try {
       if (changingRoom) {
-        await updateBooking(selection.room);
-        toast('Quarto alterado com sucesso!');
+        const updateResult = await updateBooking(selection.room);
+        if (updateResult && updateResult.error) {
+          toast.error('Erro ao alterar quarto');
+        } else {
+          toast('Quarto alterado com sucesso!');
+        }
       } else {
-        await createBooking(selection.room);
-        toast('Quarto reservado com sucesso!');
+        const createResult = await createBooking(selection.room);
+        if (createResult && createResult.error) {
+          toast.error('Erro ao reservar quarto');
+        } else {
+          toast('Quarto reservado com sucesso!');
+        }
       }
+      setUpdateRoomSuccess(true);
     } catch (error) {
       toast.error('Erro ao reservar quarto');
     }

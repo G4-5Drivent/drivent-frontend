@@ -3,7 +3,7 @@ import { StyledHotel, HotelName, DataTitle, Data, StyledImage, StyledButton } fr
 import useRoom from '../../../hooks/api/useRoom';
 import MessageBox from '../../MessageBox';
 
-export default function ReservedHotel({ name, image, roomName, roomType, hotelId, roomId, handleClick }) {
+export default function ReservedHotel({ name, image, roomName, roomType, hotelId, roomId, changeRoom }) {
   const { rooms } = useRoom(hotelId);
 
   if (!rooms) return <MessageBox message="Carregando..."></MessageBox>;
@@ -21,9 +21,9 @@ export default function ReservedHotel({ name, image, roomName, roomType, hotelId
         <Data>{`${roomName} (${roomType})`}</Data>
 
         <DataTitle>Pessoas no seu quarto:</DataTitle>
-        <Data>{getRoomText}</Data>
+        <Data>{getRoomText()}</Data>
       </StyledHotel>
-      <StyledButton onClick={handleClick}>TROCAR DE QUARTO</StyledButton>
+      <StyledButton onClick={changeRoom}>TROCAR DE QUARTO</StyledButton>
     </StyledBox>
   );
 
