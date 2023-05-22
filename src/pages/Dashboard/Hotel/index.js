@@ -19,21 +19,22 @@ export default function Hotel() {
   const { updateBooking, createBooking, updatedBooking, createdBooking } = useBooking();
 
   if (ticketsError) {
-    return <MessageBox message="Você ainda não comprou o seu ingresso. Prossiga para a escolha de atividades" />;
+    return <MessageBox message="Você ainda não comprou o seu ingresso. Prossiga para a compra do seu ingresso." />;
   }
 
-  if (ticketsLoading) return <Message message="Carregando" />;
+  if (ticketsLoading) return <Message message="Carregando..." />;
 
   if (!tickets.TicketType.includesHotel)
     return (
       <MessageBox
         message="Sua modalidade de ingresso não inclui hospedagem
-                  Prossiga para a escolha de atividades"
+                  Prossiga para a escolha de atividades."
       />
     );
 
   if (tickets.status !== 'PAID')
-    return <MessageBox message="Você ainda não pagou o seu ingresso. Prossiga para a escolha de atividades" />;
+    return <MessageBox message="Você precisa ter confirmado pagamento antes
+    de fazer a escolha de hospedagem" />;
 
   return (
     <>
