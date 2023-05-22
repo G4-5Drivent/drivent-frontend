@@ -12,8 +12,11 @@ import useGetTicket from '../../../hooks/api/useGetTicket';
 import OrderSummaryBox from '../../../components/Dashboard/Payment/OrderSummaryBox';
 import PaymentConfirmed from '../../../components/Dashboard/Payment/PaymentConfimed';
 import useTicket from '../../../hooks/api/useTicket';
+import useEnrollment from '../../../hooks/api/useEnrollment';
+import { Message } from '../../../components/Dashboard/Hotel';
 
 export default function Payment() {
+  const { enrollment } = useEnrollment();
   const { postTicket } = useTicket();
   const { ticketsTypesInfo } = useContext(TicketsTypesInfoContext);
   const { setPaymentConfirmed } = useContext(PaymentContext);
@@ -91,6 +94,19 @@ export default function Payment() {
     ticketInfo.tipo = tickets.TicketType.name.slice(0, 1) === 'P' ? 'Presencial' : 'Online';
     ticketInfo.hospedagem = tickets.TicketType.includesHotel ? 'Com Hotel' : '';
     ticketInfo.price = tickets.TicketType.price;
+  }
+
+  if(!enrollment) {
+    return(
+      <Container>
+        <Title>Ingresso e pagamento</Title>
+        <StyledBox>
+          <Message>
+            Você precisa completar sua inscrição antes <br/> de prosseguir pra escolha de ingresso.
+          </Message>
+        </StyledBox>
+      </Container>
+    );
   }
 
   if (paidTicket) {
@@ -209,4 +225,13 @@ const TicketBoxContainer = styled.div`
 
 const TotalAmount = styled.span`
   font-weight: 700;
+`;
+
+const StyledBox = styled.div`
+  width: 100%;
+  height: calc(100% - 100px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
