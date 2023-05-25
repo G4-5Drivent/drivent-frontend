@@ -5,6 +5,8 @@ import Title from '../../../components/Dashboard/Activities/Title';
 import { axiosResponseDays, response1, response2, response3 } from '../../../assets/testObj';
 import styled from 'styled-components';
 import ActivitiesSchedule from '../../../components/Dashboard/Activities/Auditoriums';
+import useGetTicket from '../../../hooks/api/useGetTicket';
+import UserWarning from '../../../components/Dashboard/Activities/UserWarning';
 
 export default function Activities() {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -31,6 +33,24 @@ export default function Activities() {
       }
     }
     return null;
+  }
+
+  const { tickets, ticketsLoading, ticketsError, fetchTickets } = useGetTicket();
+
+  if (ticketsLoading) return <UserWarning msg="Carregando......" />;
+
+  if (!tickets) {
+    return <UserWarning msg="Você ainda não comprou o seu ingresso. Prossiga para a compra do seu ingresso." />;
+  }
+
+  if (tickets.status !== 'PAID') {
+    return <UserWarning msg="Você precisa ter confirmado pagamento antes de fazer a escolha de atividades" />;
+  }
+
+  if (tickets.TicketType.isRemote) {
+    return (
+      <UserWarning msg="Sua modalidade de ingresso não necessita escolher atividade.Você terá acesso a todas as atividades. " />
+    );
   }
 
   return (
