@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Event from './Events';
 
 const Wrapper = styled.div`
   margin-top: 40px;
@@ -35,9 +36,14 @@ const AuditoriumLabel = styled.h3`
 const AuditoriumContainer = styled.div`
   width: 288px;
   height: 392px;
-  border-right: 1px solid #d7d7d7;
-  border-bottom: 1px solid #d7d7d7;
+  //border-right: 1px solid #d7d7d7;
+  //border-bottom: 1px solid #d7d7d7;
   border-left: 1px solid #d7d7d7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
+
 
   overflow-y: auto;
 
@@ -48,35 +54,42 @@ const AuditoriumContainer = styled.div`
   -ms-overflow-style: none;
   scrollbar-width: none;
 
-  :last-child {
-    border-right: none;
+  :first-child {
+    border-left: none;
   }
 `;
 
-const DateLabel = styled.h1`
-  font-family: 'Roboto', sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 25px;
-  line-height: 30px;
-  text-align: center;
-  width: 100%;
-  margin-top: 50%;
-  color: #7b7b7b;
-`;
+function calculateDuration(startTime, endTime) {
+  const [startHour, startMinute] = startTime.split(':').map(Number);
+  const [endHour, endMinute] = endTime.split(':').map(Number);
 
-export default function ActivitiesSchedule({ selectedDate }) {
+  // Calculate the duration in hours
+  const duration = endHour + endMinute / 60 - (startHour + startMinute / 60);
+
+  return duration;
+}
+
+export default function ActivitiesSchedule({ selectedDate, schedule }) {
+  const auditoriums = schedule?.auditoriums || [];
+
   return (
     <Wrapper>
       <LabelContainer>
-        <AuditoriumLabel>Auditorium 1</AuditoriumLabel>
-        <AuditoriumLabel>Auditorium 2</AuditoriumLabel>
-        <AuditoriumLabel>Auditorium 3</AuditoriumLabel>
+        {auditoriums.map((auditorium) => (
+          <AuditoriumLabel key={auditorium.name}>{auditorium.name}</AuditoriumLabel>
+        ))}
       </LabelContainer>
       <MainContainer>
-        <AuditoriumContainer><DateLabel>{selectedDate}</DateLabel></AuditoriumContainer>
-        <AuditoriumContainer><DateLabel>{selectedDate}</DateLabel></AuditoriumContainer>
-        <AuditoriumContainer><DateLabel>{selectedDate}</DateLabel></AuditoriumContainer>
+        {auditoriums.map((auditorium) => (
+          <AuditoriumContainer key={auditorium.name}>
+            {auditorium.events.map((event) => {
+              const { name, time, spots } = event;
+              const duration = calculateDuration(...time.split(' - '));
+
+              return <Event key={name} title={name} time={time} spots={spots} duration={duration} />;
+            })}
+          </AuditoriumContainer>
+        ))}
       </MainContainer>
     </Wrapper>
   );

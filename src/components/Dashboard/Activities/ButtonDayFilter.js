@@ -19,7 +19,9 @@ const StyledButtonDayFilter = styled.button`
 
   :hover{
     cursor: pointer;
-    opacity: 0.9;
+    //lighter background than the yellowish one
+    background: #ffe4b2;
+    
   }
 
   color: #000000;
