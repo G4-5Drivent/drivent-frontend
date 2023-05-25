@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const EventContainer = styled.div`
   width: 265px;
-  height: ${({ duration }) => duration * 79}px; /* Adjust the height based on the duration of the event */
+  height: ${({ duration }) => duration * 79}px; /* Adjust the minimum height based on the duration of the event */
   border: none;
   margin-bottom: 10px;
   padding: 10px;
@@ -10,12 +10,13 @@ const EventContainer = styled.div`
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
+  overflow-y: auto;
+  flex-shrink: 0; /* Prevent shrinking when content is smaller than container */
+  cursor: pointer;
 
-  :hover{
-    cursor: pointer;
+  :hover {
     background: #e0e0e0;
   }
-
 `;
 
 const TitleTimeContainer = styled.div`

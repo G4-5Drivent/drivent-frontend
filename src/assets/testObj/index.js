@@ -76,6 +76,21 @@ export const response1 = {
           time: '16:00 - 17:00',
           spots: '60',
         },
+        {
+          name: 'Event 6',
+          time: '16:00 - 17:00',
+          spots: '60',
+        },
+        {
+          name: 'Event 6',
+          time: '16:00 - 17:00',
+          spots: '60',
+        },
+        {
+          name: 'Event 6',
+          time: '16:00 - 17:00',
+          spots: '60',
+        },
       ],
     },
   ],
