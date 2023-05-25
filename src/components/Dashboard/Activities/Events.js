@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { useState } from 'react';
 
 const EventContainer = styled.div`
   width: 265px;
@@ -6,17 +7,21 @@ const EventContainer = styled.div`
   border: none;
   margin-bottom: 10px;
   padding: 10px;
-  background: #f1f1f1;
+  background: ${({ isSelected }) => (isSelected ? '#D0FFDB' : '#f1f1f1')};
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
   overflow-y: auto;
   flex-shrink: 0; /* Prevent shrinking when content is smaller than container */
-  cursor: pointer;
+  cursor: ${({ isSpotsAvailable }) => (isSpotsAvailable ? 'pointer' : 'default')};
 
-  :hover {
-    background: #e0e0e0;
-  }
+  ${({ isSpotsAvailable }) =>
+    isSpotsAvailable &&
+    css`
+      :hover {
+        background: #D0FFDB;
+      }
+    `}
 `;
 
 const TitleTimeContainer = styled.div`
@@ -67,36 +72,52 @@ const SpotsContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
+  width: 45px;
 `;
 
 export default function Event({ title, time, spots, duration }) {
   const spotsColor = parseInt(spots) > 0 ? '#078632' : '#CC6666';
+  const isSpotsAvailable = parseInt(spots) > 0;
+  const [isSelected, setSelected] = useState(false);
+
+  const handleClick = () => {
+    if (isSpotsAvailable) {
+      setSelected((prevSelected) => !prevSelected);
+    }
+  };
 
   return (
-    <EventContainer duration={duration}>
+    <EventContainer duration={duration} isSelected={isSelected} onClick={handleClick} isSpotsAvailable={isSpotsAvailable}>
       <TitleTimeContainer>
-        <Title>{title}</Title>
-        <Time>{time}</Time>
+        <Title isSelected={isSelected}>{title}</Title>
+        <Time isSelected={isSelected}>{time}</Time>
       </TitleTimeContainer>
-
       <VerticalDivider />
-
-      {parseInt(spots) > 0 ? (
-        <SpotsContainer>
+      <SpotsContainer>
+        {isSelected ? (
           <ion-icon
-            name="log-in-outline"
+            name="checkmark-circle-outline"
             style={{ color: spotsColor, '--ionicon-stroke-width': '32px', fontSize: '24px' }}
           />
-
-          <Spots spots={spots}>{spots} vagas</Spots>
-        </SpotsContainer>
-      ) : (
-        <SpotsContainer>
-          <ion-icon name="close-circle-outline" style={{ color: spotsColor, '--ionicon-stroke-width': '32px', fontSize: '24px'  }} />
-          <Spots spots={spots}> Esgotado </Spots>
-        </SpotsContainer>
-      )}
+        ) : (
+          <>
+            {isSpotsAvailable ? (
+              <ion-icon
+                name="log-in-outline"
+                style={{ color: spotsColor, '--ionicon-stroke-width': '32px', fontSize: '24px' }}
+              />
+            ) : (
+              <ion-icon
+                name="close-circle-outline"
+                style={{ color: spotsColor, '--ionicon-stroke-width': '32px', fontSize: '24px' }}
+              />
+            )}
+          </>
+        )}
+        <Spots spots={spots} isSelected={isSelected}>
+          {isSelected ? 'Inscrito' : `${spots} vagas`}
+        </Spots>
+      </SpotsContainer>
     </EventContainer>
   );
 }

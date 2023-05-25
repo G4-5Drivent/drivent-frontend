@@ -32,7 +32,7 @@ export default function Activities() {
     }
     return null;
   }
-  console.log(schedule);
+
   return (
     <>
       <Title>Escolha de atividades</Title>

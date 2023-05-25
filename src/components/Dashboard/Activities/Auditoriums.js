@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Event from './Events';
+import { useState } from 'react';
 
 const Wrapper = styled.div`
   margin-top: 40px;
@@ -44,7 +45,6 @@ const AuditoriumContainer = styled.div`
   align-items: center;
   padding-top: 10px;
 
-
   overflow-y: auto;
 
   ::-webkit-scrollbar {
@@ -71,6 +71,17 @@ function calculateDuration(startTime, endTime) {
 
 export default function ActivitiesSchedule({ selectedDate, schedule }) {
   const auditoriums = schedule?.auditoriums || [];
+  const [selectedEvents, setSelectedEvents] = useState({});
+
+  function handleEventClick(event) {
+    const { name, spots } = event;
+    if (parseInt(spots) > 0) {
+      setSelectedEvents((prevSelectedEvents) => ({
+        ...prevSelectedEvents,
+        [name]: true,
+      }));
+    }
+  }
 
   return (
     <Wrapper>
@@ -85,8 +96,19 @@ export default function ActivitiesSchedule({ selectedDate, schedule }) {
             {auditorium.events.map((event) => {
               const { name, time, spots } = event;
               const duration = calculateDuration(...time.split(' - '));
+              const isSelected = selectedEvents[name] || false;
 
-              return <Event key={name} title={name} time={time} spots={spots} duration={duration} />;
+              return (
+                <Event
+                  key={name}
+                  title={name}
+                  time={time}
+                  spots={spots}
+                  duration={duration}
+                  isSelected={isSelected}
+                  onClick={handleEventClick}
+                />
+              );
             })}
           </AuditoriumContainer>
         ))}
