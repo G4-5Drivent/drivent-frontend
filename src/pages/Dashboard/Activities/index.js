@@ -7,37 +7,20 @@ import styled from 'styled-components';
 import ActivitiesSchedule from '../../../components/Dashboard/Activities/Auditoriums';
 import useGetTicket from '../../../hooks/api/useGetTicket';
 import UserWarning from '../../../components/Dashboard/Activities/UserWarning';
+import useGetActivitiesDays from '../../../hooks/api/useGetActivitiesDays';
 
 export default function Activities() {
   const [selectedDate, setSelectedDate] = useState(null);
-  const [schedule, setSchedule] = useState(null);
+  
+  const { days, daysLoading, daysError, fetchDays } = useGetActivitiesDays();
 
   function handleDayFilter(date) {
     setSelectedDate(date);
-    setSchedule(handleSchedule(date));
-  }
-
-  function handleSchedule(date) {
-    const selectedEventDate = axiosResponseDays.data.eventDates.find((eventDate) => eventDate.date === date);
-    if (selectedEventDate) {
-      const relatedTableId = selectedEventDate.relatedTableId;
-      switch (relatedTableId) {
-      case 1:
-        return response1;
-      case 2:
-        return response2;
-      case 3:
-        return response3;
-      default:
-        return null;
-      }
-    }
-    return null;
   }
 
   const { tickets, ticketsLoading, ticketsError, fetchTickets } = useGetTicket();
 
-  if (ticketsLoading) return <UserWarning msg="Carregando......" />;
+  if (ticketsLoading || daysLoading) return <UserWarning msg="Carregando......" />;
 
   if (!tickets) {
     return <UserWarning msg="Você ainda não comprou o seu ingresso. Prossiga para a compra do seu ingresso." />;
@@ -58,7 +41,7 @@ export default function Activities() {
       <Title>Escolha de atividades</Title>
       <Instruction>Primeiro, filtre pelo dia do evento</Instruction>
       <StyledButtonContainer>
-        {axiosResponseDays.data.eventDates.map((eventDate) => (
+        {days.map((eventDate) => (
           <ButtonDayFilter
             key={eventDate.day}
             day={eventDate.day}
@@ -69,7 +52,7 @@ export default function Activities() {
         ))}
       </StyledButtonContainer>
 
-      {selectedDate && <ActivitiesSchedule selectedDate={selectedDate} schedule={schedule} />}
+      {selectedDate && <ActivitiesSchedule selectedDate={selectedDate} />}
     </>
   );
 }

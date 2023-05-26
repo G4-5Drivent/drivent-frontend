@@ -10,10 +10,12 @@ const StyledButtonDayFilter = styled.button`
   border: none;
   margin-right: 17px;
 
+  text-transform: capitalize;
+
   font-family: 'Roboto', sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 16px;
   text-align: center;
 
