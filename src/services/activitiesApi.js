@@ -10,14 +10,10 @@ export async function getDays(token) {
 }
 
 export async function getActivitiesByDate(date, token) {
-  const response = await api.get('/activities/date', {
+  const response = await api.get(`/activities/places/date/${date}`, {
     headers: {
       Authorization: `Bearer ${token}`,
-    },
-    body: {
-      date,
     },
   });
   return response.data;
 }
-
