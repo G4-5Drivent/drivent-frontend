@@ -1,5 +1,8 @@
 import styled, { css } from 'styled-components';
 import { useState } from 'react';
+import useActivities from '../../../hooks/api/useActivities';
+import { fi } from 'date-fns/locale';
+import { toast } from 'react-toastify';
 
 const EventContainer = styled.div`
   width: 265px;
@@ -74,14 +77,26 @@ const SpotsContainer = styled.div`
   width: 45px;
 `;
 
-export default function Event({ title, startsAt, endsAt, spots, duration }) {
+export default function Event({ title, startsAt, endsAt, spots, duration, id, isSubscribed }) {
   const spotsColor = parseInt(spots) > 0 ? '#078632' : '#CC6666';
   const isSpotsAvailable = parseInt(spots) > 0;
   const [isSelected, setSelected] = useState(false);
+  const { subscribeToActivity } = useActivities();
 
-  const handleClick = () => {
-    if (isSpotsAvailable) {
-      setSelected((prevSelected) => !prevSelected);
+  // eslint-disable-next-line space-before-function-paren
+  const handleClick = async () => {
+    try {
+      await subscribeToActivity(id);
+      if (isSpotsAvailable) setSelected((prevSelected) => !prevSelected);
+      toast('Inscrição realizada com sucesso');
+    } catch (error) {
+      if (error.response.status === 409) {
+        toast.error('Você já está inscrito nesta atividade');
+      } else if (error.response.status === 422) {
+        toast.error('Você não pode se inscrever em duas atividades que ocorrem no mesmo horário');
+      } else {
+        toast.error('Erro ao realizar inscrição');
+      }
     }
   };
 
@@ -98,7 +113,7 @@ export default function Event({ title, startsAt, endsAt, spots, duration }) {
       </TitleTimeContainer>
       <VerticalDivider />
       <SpotsContainer>
-        {isSelected ? (
+        {isSelected || isSubscribed ? (
           <ion-icon
             name="checkmark-circle-outline"
             style={{ color: spotsColor, '--ionicon-stroke-width': '32px', fontSize: '24px' }}

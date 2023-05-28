@@ -75,11 +75,11 @@ export default function ActivitiesSchedule({ selectedDate, schedule }) {
   const { auditoriums, auditoriumsLoading } = useGetAuditoriums(selectedDate);
   const [selectedEvents, setSelectedEvents] = useState({});
 
-  console.log(selectedDate);
-
   if (auditoriumsLoading || !auditoriums) return <UserWarning msg="Carregando..." />;
 
-  function handleEventClick(event) {
+  console.log('auditoriums: ', auditoriums);
+
+  async function handleEventClick(event) {
     const { name, spots } = event;
     if (parseInt(spots) > 0) {
       setSelectedEvents((prevSelectedEvents) => ({
@@ -100,13 +100,14 @@ export default function ActivitiesSchedule({ selectedDate, schedule }) {
         {auditoriums.map((auditorium) => (
           <AuditoriumContainer key={auditorium.name}>
             {auditorium.activities.map((activity) => {
-              const { name, startsAt, endsAt, spotsAvailable } = activity;
+              const { name, startsAt, endsAt, spotsAvailable, id, isSubscribed } = activity;
               const duration = calculateDuration(startsAt, endsAt);
               const isSelected = selectedEvents[name] || false;
 
               return (
                 <Event
                   key={name}
+                  id={id}
                   title={name}
                   startsAt={startsAt}
                   endsAt={endsAt}
@@ -114,6 +115,7 @@ export default function ActivitiesSchedule({ selectedDate, schedule }) {
                   duration={duration}
                   isSelected={isSelected}
                   onClick={handleEventClick}
+                  isSubscribed={isSubscribed}
                 />
               );
             })}

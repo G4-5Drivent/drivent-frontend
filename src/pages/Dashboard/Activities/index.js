@@ -17,7 +17,7 @@ export default function Activities() {
     setSelectedDate(date);
   }
 
-  const { tickets, ticketsLoading, ticketsError, fetchTickets } = useGetTicket();
+  const { tickets, ticketsLoading } = useGetTicket();
 
   if (ticketsLoading || daysLoading) return <UserWarning msg="Carregando......" />;
 

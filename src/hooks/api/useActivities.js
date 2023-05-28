@@ -12,10 +12,16 @@ export default function useActivities() {
     act: fetchDays,
   } = useAsync(() => activitiesApi.getDays(token));
 
+  const { act: subscribeToActivity } = useAsync(
+    (activityId) => activitiesApi.subscribeToActivity(activityId, token),
+    false
+  );
+
   return {
     days,
     daysLoading,
     daysError,
     fetchDays,
+    subscribeToActivity,
   };
 }
