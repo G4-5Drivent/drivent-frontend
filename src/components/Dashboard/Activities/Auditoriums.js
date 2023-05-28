@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import Event from './Events';
 import { useState } from 'react';
-import useGetActivitiesByDate from '../../../hooks/api/useGetActivitiesByDate';
+import useGetActivitiesByDate from '../../../hooks/api/useGetAuditoriums';
+import useGetAuditoriums from '../../../hooks/api/useGetAuditoriums';
 
 const Wrapper = styled.div`
   margin-top: 40px;
@@ -71,7 +72,7 @@ function calculateDuration(startTime, endTime) {
 }
 
 export default function ActivitiesSchedule({ selectedDate, schedule }) {
-  const { activities, activitiesLoading, activitiesError, fetchActivities } = useGetActivitiesByDate(selectedDate);
+  const { activities, activitiesLoading, activitiesError, fetchActivities } = useGetAuditoriums(selectedDate);
 
   console.log(activities);
 
