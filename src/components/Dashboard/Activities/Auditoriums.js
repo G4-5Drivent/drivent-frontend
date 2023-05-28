@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import Event from './Events';
 import { useState } from 'react';
-import useGetActivitiesByDate from '../../../hooks/api/useGetAuditoriums';
 import useGetAuditoriums from '../../../hooks/api/useGetAuditoriums';
+import UserWarning from './UserWarning';
 
 const Wrapper = styled.div`
   margin-top: 40px;
@@ -72,12 +72,12 @@ function calculateDuration(startTime, endTime) {
 }
 
 export default function ActivitiesSchedule({ selectedDate, schedule }) {
-  const { activities, activitiesLoading, activitiesError, fetchActivities } = useGetAuditoriums(selectedDate);
-
-  console.log(activities);
-
-  const auditoriums = schedule?.auditoriums || [];
+  const { auditoriums, auditoriumsLoading } = useGetAuditoriums(selectedDate);
   const [selectedEvents, setSelectedEvents] = useState({});
+
+  console.log(selectedDate);
+
+  if (auditoriumsLoading || !auditoriums) return <UserWarning msg="Carregando..." />;
 
   function handleEventClick(event) {
     const { name, spots } = event;
@@ -99,17 +99,18 @@ export default function ActivitiesSchedule({ selectedDate, schedule }) {
       <MainContainer>
         {auditoriums.map((auditorium) => (
           <AuditoriumContainer key={auditorium.name}>
-            {auditorium.events.map((event) => {
-              const { name, time, spots } = event;
-              const duration = calculateDuration(...time.split(' - '));
+            {auditorium.activities.map((activity) => {
+              const { name, startsAt, endsAt, spotsAvailable } = activity;
+              const duration = calculateDuration(startsAt, endsAt);
               const isSelected = selectedEvents[name] || false;
 
               return (
                 <Event
                   key={name}
                   title={name}
-                  time={time}
-                  spots={spots}
+                  startsAt={startsAt}
+                  endsAt={endsAt}
+                  spots={spotsAvailable}
                   duration={duration}
                   isSelected={isSelected}
                   onClick={handleEventClick}

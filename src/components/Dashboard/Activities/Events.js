@@ -19,7 +19,7 @@ const EventContainer = styled.div`
     isSpotsAvailable &&
     css`
       :hover {
-        background: #D0FFDB;
+        background: #d0ffdb;
       }
     `}
 `;
@@ -64,7 +64,6 @@ const Spots = styled.p`
   line-height: 11px;
   position: relative;
   color: ${({ spots }) => (parseInt(spots, 10) > 0 ? '#078632' : '#CC6666')};
-
 `;
 
 const SpotsContainer = styled.div`
@@ -75,7 +74,7 @@ const SpotsContainer = styled.div`
   width: 45px;
 `;
 
-export default function Event({ title, time, spots, duration }) {
+export default function Event({ title, startsAt, endsAt, spots, duration }) {
   const spotsColor = parseInt(spots) > 0 ? '#078632' : '#CC6666';
   const isSpotsAvailable = parseInt(spots) > 0;
   const [isSelected, setSelected] = useState(false);
@@ -87,10 +86,15 @@ export default function Event({ title, time, spots, duration }) {
   };
 
   return (
-    <EventContainer duration={duration} isSelected={isSelected} onClick={handleClick} isSpotsAvailable={isSpotsAvailable}>
+    <EventContainer
+      duration={duration}
+      isSelected={isSelected}
+      onClick={handleClick}
+      isSpotsAvailable={isSpotsAvailable}
+    >
       <TitleTimeContainer>
         <Title isSelected={isSelected}>{title}</Title>
-        <Time isSelected={isSelected}>{time}</Time>
+        <Time isSelected={isSelected}>{`${startsAt} - ${endsAt}`}</Time>
       </TitleTimeContainer>
       <VerticalDivider />
       <SpotsContainer>

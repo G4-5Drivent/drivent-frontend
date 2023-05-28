@@ -2,17 +2,16 @@ import React, { useState } from 'react';
 import ButtonDayFilter from '../../../components/Dashboard/Activities/ButtonDayFilter';
 import Instruction from '../../../components/Dashboard/Activities/Instruction';
 import Title from '../../../components/Dashboard/Activities/Title';
-import { axiosResponseDays, response1, response2, response3 } from '../../../assets/testObj';
 import styled from 'styled-components';
 import ActivitiesSchedule from '../../../components/Dashboard/Activities/Auditoriums';
 import useGetTicket from '../../../hooks/api/useGetTicket';
 import UserWarning from '../../../components/Dashboard/Activities/UserWarning';
-import useGetActivitiesDays from '../../../hooks/api/useGetActivitiesDays';
+import useActivities from '../../../hooks/api/useActivities';
 
 export default function Activities() {
   const [selectedDate, setSelectedDate] = useState(null);
-  
-  const { days, daysLoading, daysError, fetchDays } = useGetActivitiesDays();
+
+  const { days, daysLoading } = useActivities();
 
   function handleDayFilter(date) {
     setSelectedDate(date);

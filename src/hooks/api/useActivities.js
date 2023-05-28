@@ -2,7 +2,7 @@ import useAsync from '../useAsync';
 import * as activitiesApi from '../../services/activitiesApi';
 import useToken from '../useToken';
 
-export default function useGetActivitiesDays() {
+export default function useActivities() {
   const token = useToken();
 
   const {
